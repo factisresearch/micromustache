@@ -5,6 +5,8 @@ export interface ITokens {
   varNames: string[]
 }
 
+const ESCAPE = '/'
+
 /**
  * Parse a string and returns an array of variable names and non-processing strings.
  * functions ready for the compiler to go through them.
@@ -41,15 +43,17 @@ export function tokenize(
   const strings: string[] = []
   const varNames: string[] = []
 
-  for (
-    let currentIndex = 0;
-    currentIndex < template.length;
-    currentIndex = closeIndex
-  ) {
+  for (let currentIndex = 0; currentIndex < template.length; ) {
     openIndex = template.indexOf(openSym, currentIndex)
     if (openIndex === -1) {
+      strings.push(template.substring(currentIndex))
       break
     }
+
+    if (template.charAt(openIndex - 1) === ESCAPE) {
+      strings.push(template.substring(currentIndex, openIndex - 1) + openSym)
+      currentIndex = openIndex + openSymLen
+    } else {
 
     closeIndex = template.indexOf(closeSym, openIndex)
     assertSyntax(
@@ -76,10 +80,14 @@ export function tokenize(
     closeIndex += closeSymLen
     before = template.substring(currentIndex, openIndex)
     strings.push(before)
+    currentIndex = closeIndex
+    }
   }
 
+  if (varNames.length >= 0 && closeIndex) {
   const rest = template.substring(closeIndex)
   strings.push(rest)
+  }
 
   return { strings, varNames }
 }

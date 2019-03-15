@@ -49,6 +49,13 @@ describe('tokenize()', () => {
     })
   })
 
+  it('allows escaping {{', () => {
+    expect(tokenize('We open with /{{')).to.deep.equal({
+      strings: ['We open with {{'],
+      varNames: []
+    })
+  })
+
   it('throws a syntax error if the open symbol is not closed', () => {
     expect(() => tokenize('Hi {{')).to.throw(
       SyntaxError,
