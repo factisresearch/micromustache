@@ -1,0 +1,68 @@
+{
+  "name": "micromustache",
+  "version": "5.4.0",
+  "description": "A fast, minimal and secure template engine for JavaScript",
+  "keywords": [
+    "template",
+    "mustache",
+    "string processing",
+    "string interpolation",
+    "template engine",
+    "lodash get",
+    "lodash toPath",
+    "lodash template",
+    "microlibrary"
+  ],
+  "main": "dist/node/index.js",
+  "types": "./dist/node/types.d.ts",
+  "bin": {
+    "micromustache": "./bin/micromustache.js"
+  },
+  "directories": {
+    "lib": "./dist/node"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^11.13.8",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "mustache": "^3.0.1",
+    "prettier": "^1.17.0",
+    "rimraf": "^2.6.3",
+    "sloc": "^0.2.1",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.4.5"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:amd": "tsc -p tsconfig-amd.json",
+    "build:node": "tsc -p tsconfig-node.json",
+    "build": "npm run build:amd && npm run build:node",
+    "clean:build": "npm run clean && npm run build",
+    "docs": "typedoc --out docs/ --mode modules --tsconfig tsconfig-docs.json --theme minimal",
+    "pretest": "npm run lint",
+    "lint": "tslint -p .",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "preversion": "npm test",
+    "prepublishOnly": "npm run test && npm run clean && npm run build && pkg-ok",
+    "postversion": "git push && git push --tags",
+    "api-extractor": "api-extractor run --local",
+    "sloc": "sloc src -e .*spec.* -k source --format cli-table"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/userpixel/micromustache.git"
+  },
+  "author": "Alex Ewerlöf",
+  "license": "MIT",
+  "dependencies": {}
+}
